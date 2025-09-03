@@ -1,352 +1,694 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #5a5a5a; -webkit-text-stroke: #5a5a5a; background-color: #e7edf5}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #5a5a5a; -webkit-text-stroke: #5a5a5a; background-color: #e7edf5; min-height: 16.0px}
-    span.s1 {font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gloee - Full Stack Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        /* 네비게이션 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #667eea;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            color: white;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 플로팅 요소들 */
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        /* 섹션 공통 스타일 */
+        .section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        /* About 섹션 */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            margin: 0 auto;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        /* 스킬 섹션 */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .skill-category h4 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            padding: 0.3rem 0.8rem;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* 프로젝트 섹션 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .project-img {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .project-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tag {
+            padding: 0.2rem 0.6rem;
+            background: #e9ecef;
+            color: #667eea;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            padding: 0.5rem 1rem;
+            border: 2px solid #667eea;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .project-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* 연락 섹션 */
+        .contact {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .contact-content {
+            text-align: center;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 푸터 */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="ko"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Gemini RAG 기반 사내 매뉴얼 챗봇&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-family: 'Noto Sans KR', sans-serif;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.chat-bubble {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 80%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>word-wrap: break-word;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.chat-bubble.user {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #3B82F6; /* blue-500 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.chat-bubble.bot {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #E5E7EB; /* gray-200 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: #1F2937; /* gray-800 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* 스크롤바 스타일링 */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 8px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-track {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #f1f1f1;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-thumb {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #888;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 4px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>::-webkit-scrollbar-thumb:hover {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #555;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300"&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="container mx-auto p-4 max-w-4xl"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;header class="text-center mb-6"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-3xl font-bold text-gray-800 dark:text-white"&gt;RAG 기반 사내 매뉴얼 챗봇&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p class="text-md text-gray-600 dark:text-gray-400 mt-2"&gt;Gemini API를 사용하여 매뉴얼 내용을 기반으로 답변합니다.&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;main class="grid grid-cols-1 md:grid-cols-2 gap-6"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- Left Panel: Knowledge Base Input --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-xl font-semibold mb-3 border-b pb-2 border-gray-200 dark:border-gray-700"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span class="text-2xl mr-2"&gt;📚&lt;/span&gt;1. 매뉴얼 학습시키기</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/h2&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p class="text-sm text-gray-500 dark:text-gray-400 mb-4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>여기에 학습시킬 매뉴얼 전체 텍스트를 붙여넣으세요. 내용이 길어도 괜찮습니다. (PDF, DOCX 등의 내용을 복사-붙여넣기)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/p&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;textarea id="manual-text"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>class="w-full h-96 p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>placeholder="예시)<span class="Apple-converted-space"> </span></span></p>
-<p class="p1"><span class="s1">제 1조 (목적) 이 규정은 회사의 휴가 운영에 관한 사항을 정함을 목적으로 한다.</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">제 2조 (연차 유급휴가)</span></p>
-<p class="p1"><span class="s1">1. 회사는 1년간 80% 이상 출근한 직원에게 15일의 유급휴가를 준다.</span></p>
-<p class="p1"><span class="s1">2. 3년 이상 계속하여 근로한 직원에게는 최초 1년을 초과하는 계속 근로 연수 매 2년에 대하여 1일을 가산한 유급휴가를 준다.</span></p>
-<p class="p1"><span class="s1">..."&gt;&lt;/textarea&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button id="update-manual-btn" class="mt-4 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-transform transform hover:scale-105"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>매뉴얼 업데이트 및 학습</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                 </span>&lt;div id="manual-status" class="mt-2 text-sm text-green-600 dark:text-green-400"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;!-- Right Panel: Chatbot Interface --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex flex-col h-[34rem]"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-xl font-semibold mb-3 border-b pb-2 border-gray-200 dark:border-gray-700"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span class="text-2xl mr-2"&gt;💬&lt;/span&gt;2. 챗봇에게 질문하기</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/h2&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div id="chat-window" class="flex-grow overflow-y-auto mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;!-- Chat messages will be appended here --&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                     </span>&lt;div class="flex justify-start mb-2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="chat-bubble bot rounded-lg p-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>안녕하세요! 좌측에 매뉴얼을 입력하고 학습시킨 후, 저에게 질문해주세요.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="flex mt-auto"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="user-input"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>class="flex-grow p-3 border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>placeholder="질문을 입력하세요..." disabled&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="send-btn"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>class="bg-blue-600 text-white font-bold py-2 px-6 rounded-r-md hover:bg-blue-700 transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:dark:bg-gray-600 disabled:transform-none"</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>disabled&gt;전송&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- DOM 요소 가져오기 ---</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const manualTextArea = document.getElementById('manual-text');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const updateManualBtn = document.getElementById('update-manual-btn');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const manualStatus = document.getElementById('manual-status');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const chatWindow = document.getElementById('chat-window');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const userInput = document.getElementById('user-input');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const sendBtn = document.getElementById('send-btn');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 전역 변수 설정 ---</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let knowledgeBase = []; // 매뉴얼 텍스트를 문단(청크) 단위로 저장할 배열</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=`; // API 키는 Canvas 환경에서 자동으로 제공됩니다.</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 이벤트 리스너 설정 ---</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// "매뉴얼 업데이트" 버튼 클릭 이벤트</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>updateManualBtn.addEventListener('click', processAndStoreManual);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// "전송" 버튼 클릭 이벤트</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>sendBtn.addEventListener('click', handleUserQuery);</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 사용자 입력창에서 Enter 키 입력 이벤트</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>userInput.addEventListener('keydown', (event) =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (event.key === 'Enter') {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>handleUserQuery();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- 핵심 기능 함수 ---</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/**</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* 1. 매뉴얼 처리 및 저장 (RAG의 Ingestion/Indexing 단계)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* 사용자가 입력한 텍스트를 문단 단위로 분할하여 knowledgeBase 배열에 저장합니다.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>*/</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function processAndStoreManual() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const manualText = manualTextArea.value.trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!manualText) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>updateStatus('학습할 내용이 없습니다. 매뉴얼 텍스트를 입력해주세요.', 'error');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 간단한 문단 분할(Chunking): 빈 줄을 기준으로 텍스트를 나눕니다.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>knowledgeBase = manualText.split(/\n\s*\n/).filter(p =&gt; p.trim().length &gt; 0);</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (knowledgeBase.length &gt; 0) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>updateStatus(`성공! 총 ${knowledgeBase.length}개의 문단(지식)으로 분할하여 학습했습니다.`, 'success');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>userInput.disabled = false;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>sendBtn.disabled = false;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>userInput.focus();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>addMessageToChat('안녕하세요! 이제 저에게 질문할 수 있습니다. 무엇이 궁금하신가요?', 'bot');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                 </span>updateStatus('유효한 문단을 찾을 수 없습니다. 내용을 다시 확인해주세요.', 'error');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/**</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* 2. 사용자 질문 처리</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>*/</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function handleUserQuery() {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const query = userInput.value.trim();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (!query) return;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>addMessageToChat(query, 'user');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>userInput.value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setChatLoading(true);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>try {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>// 3. 관련 정보 검색 (RAG의 Retrieval 단계)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const relevantContext = findRelevantContext(query, 3);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>// 4. LLM을 통한 답변 생성 (RAG의 Generation 단계)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const answer = await generateAnswerWithGemini(query, relevantContext);</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>addMessageToChat(answer, 'bot');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} catch (error) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error('Gemini API 호출 중 오류:', error);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>addMessageToChat('죄송합니다, 답변을 생성하는 중에 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'bot');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} finally {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>setChatLoading(false);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/**</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* 3. 관련 정보 검색 (간단한 키워드 기반 검색)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* @param {string} query 사용자 질문</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* @param {number} topN 가장 관련성 높은 N개의 문단을 반환</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* @returns {string} 검색된 문단들을 합친 텍스트</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>*/</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function findRelevantContext(query, topN) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (knowledgeBase.length === 0) return "";</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const queryWords = new Set(query.toLowerCase().split(/\s+/));</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const scoredParagraphs = knowledgeBase.map(paragraph =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const paragraphWords = new Set(paragraph.toLowerCase().split(/\s+/));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const commonWords = [...queryWords].filter(word =&gt; paragraphWords.has(word));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>return { paragraph, score: commonWords.length };</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 점수가 높은 순으로 정렬</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>scoredParagraphs.sort((a, b) =&gt; b.score - a.score);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 상위 N개의 문단을 선택하고, 점수가 0인 경우는 제외</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const topParagraphs = scoredParagraphs.slice(0, topN)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>.filter(item =&gt; item.score &gt; 0)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>.map(item =&gt; item.paragraph);</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>console.log("검색된 관련 문단:", topParagraphs);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>return topParagraphs.join('\n\n---\n\n'); // 문단들을 구분자와 함께 합침</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/**</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* 4. Gemini API를 호출하여 답변 생성</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* @param {string} query 사용자 질문</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* @param {string} context 검색된 관련 매뉴얼 내용</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>* @returns {string} 생성된 답변</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">         </span>*/</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function generateAnswerWithGemini(query, context) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Gemini에게 전달할 프롬프트를 구성합니다.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 이 프롬프트 엔지니어링이 RAG의 핵심입니다.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const prompt = `</span></p>
-<p class="p1"><span class="s1">당신은 사내 매뉴얼 전문가 챗봇입니다. 아래에 제공되는 "매뉴얼 내용"을 바탕으로 사용자의 "질문"에 대해 답변해야 합니다.</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">규칙:</span></p>
-<p class="p1"><span class="s1">- 반드시 "매뉴얼 내용"에 근거해서만 답변하세요. 당신의 사전 지식을 사용하지 마세요.</span></p>
-<p class="p1"><span class="s1">- "매뉴얼 내용"에서 답변을 찾을 수 없다면, "죄송하지만 문의하신 내용은 제가 학습한 매뉴얼에서 찾을 수 없습니다."라고 정확히 답변하세요.</span></p>
-<p class="p1"><span class="s1">- 답변은 명확하고 간결하게, 한국어로 작성해주세요.</span></p>
-<p class="p1"><span class="s1">- 어떤 매뉴얼 내용을 참고했는지 출처를 언급하지는 마세요. 그냥 답변만 생성하세요.</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">---</span></p>
-<p class="p1"><span class="s1">[매뉴얼 내용]</span></p>
-<p class="p1"><span class="s1">${context || "참고할 매뉴얼 내용이 없습니다."}</span></p>
-<p class="p1"><span class="s1">---</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">[질문]</span></p>
-<p class="p1"><span class="s1">${query}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">[답변]</span></p>
-<p class="p1"><span class="s1">`;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>console.log("Gemini API에 전달될 프롬프트:", prompt);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const payload = {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>contents: [{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>parts: [{ text: prompt }]</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}]</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// API 호출 시 지수 백오프를 사용한 재시도 로직</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let response;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let attempts = 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const maxAttempts = 3;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const initialDelay = 1000; // 1초</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>while (attempts &lt; maxAttempts) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>try {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>response = await fetch(GEMINI_API_URL, {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>method: 'POST',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>headers: { 'Content-Type': 'application/json' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>body: JSON.stringify(payload)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (response.ok) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>const result = await response.json();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>return result.candidates[0].content.parts[0].text;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>} else if (response.status === 429) { // Too Many Requests</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>console.warn(`API 요청 제한, ${initialDelay * Math.pow(2, attempts)}ms 후 재시도...`);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>await new Promise(resolve =&gt; setTimeout(resolve, initialDelay * Math.pow(2, attempts)));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>attempts++;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>throw new Error(`API Error: ${response.status} ${response.statusText}`);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>} catch (error) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>console.error(`API 호출 시도 ${attempts + 1} 실패:`, error);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>attempts++;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (attempts &gt;= maxAttempts) throw error;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>await new Promise(resolve =&gt; setTimeout(resolve, initialDelay * Math.pow(2, attempts)));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>throw new Error("최대 재시도 횟수를 초과했습니다.");</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// --- UI 헬퍼 함수 ---</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function addMessageToChat(text, sender) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const bubble = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>bubble.className = `chat-bubble ${sender} rounded-lg p-3 mb-2`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>bubble.textContent = text;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const messageWrapper = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>messageWrapper.className = `flex mb-2 ${sender === 'user' ? 'justify-end' : 'justify-start'}`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>messageWrapper.appendChild(bubble);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>chatWindow.appendChild(messageWrapper);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>chatWindow.scrollTop = chatWindow.scrollHeight; // 항상 최신 메시지가 보이도록 스크롤</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function setChatLoading(isLoading) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (isLoading) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>sendBtn.disabled = true;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>userInput.disabled = true;</span></p>
-<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const loadingBubble = document.createElement('div');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>loadingBubble.id = 'loading-bubble';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>loadingBubble.className = 'flex justify-start mb-2';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>loadingBubble.innerHTML = `</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="chat-bubble bot rounded-lg p-3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span class="mr-2"&gt;답변을 생성 중입니다...&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 dark:border-gray-100"&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>chatWindow.appendChild(loadingBubble);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>chatWindow.scrollTop = chatWindow.scrollHeight;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const loadingBubble = document.getElementById('loading-bubble');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (loadingBubble) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>loadingBubble.remove();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>sendBtn.disabled = false;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>userInput.disabled = false;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>userInput.focus();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function updateStatus(message, type) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>manualStatus.textContent = message;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (type === 'success') {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>manualStatus.className = 'mt-2 text-sm text-green-600 dark:text-green-400';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>manualStatus.className = 'mt-2 text-sm text-red-600 dark:text-red-400';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+<!-- 네비게이션 -->
+<nav>
+    <div class="container">
+        <div class="logo">GloleeDev</div>
+        <ul>
+            <li><a href="#home">홈</a></li>
+            <li><a href="#about">소개</a></li>
+            <li><a href="#skills">스킬</a></li>
+            <li><a href="#projects">프로젝트</a></li>
+            <li><a href="#contact">연락처</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- 히어로 섹션 -->
+<section class="hero" id="home">
+    <div class="floating-element">💻</div>
+    <div class="floating-element">🚀</div>
+    <div class="floating-element">⚡</div>
+
+    <div class="hero-content">
+        <h1>Glolee</h1>
+        <p>창의적이고 열정적인 풀스택 개발자입니다.<br>
+            사용자 중심의 혁신적인 웹 솔루션을 만들어갑니다.</p>
+        <a href="#projects" class="cta-button">프로젝트 보기</a>
+    </div>
+</section>
+
+<!-- About 섹션 -->
+<section class="section" id="about">
+    <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+            <div class="profile-img">👨‍💻</div>
+            <div class="about-text">
+                <h3>안녕하세요! Gloee입니다.</h3>
+                <p>3년간 풀스택 개발자로 활동하며, 사용자 경험을 최우선으로 생각하는 개발자입니다.
+                    새로운 기술을 배우는 것을 좋아하며, 효율적이고 확장 가능한 코드를 작성하기 위해 노력합니다.</p>
+                <p>현재는 React, Node.js를 중심으로 한 모던 웹 개발에 집중하고 있으며,
+                    최근에는 AI/ML 기술을 웹 서비스에 접목하는 프로젝트에 관심이 많습니다.</p>
+                <p>팀워크를 중시하며, 지속적인 학습과 성장을 통해 더 나은 개발자가 되고자 합니다.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills 섹션 -->
+<section class="section" id="skills">
+    <div class="container">
+        <h2 class="section-title">Skills & Technologies</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h4>🎨 Frontend</h4>
+                <div class="skill-tags">
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">Vue.js</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">HTML5/CSS3</span>
+                    <span class="skill-tag">Tailwind CSS</span>
+                    <span class="skill-tag">Next.js</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h4>⚙️ Backend</h4>
+                <div class="skill-tags">
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">Express</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Django</span>
+                    <span class="skill-tag">FastAPI</span>
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h4>🛠️ DevOps & Tools</h4>
+                <div class="skill-tags">
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">CI/CD</span>
+                    <span class="skill-tag">Linux</span>
+                    <span class="skill-tag">Redis</span>
+                    <span class="skill-tag">Nginx</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects 섹션 -->
+<section class="section" id="projects">
+    <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-img">🛍️</div>
+                <div class="project-content">
+                    <h4>E-Commerce Platform</h4>
+                    <p>React와 Node.js를 이용한 풀스택 이커머스 플랫폼입니다.
+                        결제 시스템, 관리자 대시보드, 실시간 채팅 기능을 포함합니다.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Socket.io</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">라이브 데모</a>
+                        <a href="#" class="project-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img">📊</div>
+                <div class="project-content">
+                    <h4>Analytics Dashboard</h4>
+                    <p>실시간 데이터 시각화를 위한 대시보드입니다.
+                        Chart.js를 활용한 인터랙티브 차트와 실시간 업데이트 기능을 제공합니다.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Vue.js</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">Chart.js</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">라이브 데모</a>
+                        <a href="#" class="project-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img">🤖</div>
+                <div class="project-content">
+                    <h4>AI Chatbot Service</h4>
+                    <p>자연어 처리 기술을 활용한 고객 서비스 챗봇입니다.
+                        머신러닝 모델을 통한 의도 분석과 자동 응답 기능을 제공합니다.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">라이브 데모</a>
+                        <a href="#" class="project-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact 섹션 -->
+<section class="section contact" id="contact">
+    <div class="container">
+        <div class="contact-content">
+            <h2 class="section-title">Let's Work Together</h2>
+            <p>새로운 프로젝트나 협업 기회에 대해 이야기하고 싶으시다면 언제든 연락 주세요!</p>
+
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h4>📧 이메일</h4>
+                    <p>leedev@example.com</p>
+                </div>
+                <div class="contact-item">
+                    <h4>💼 LinkedIn</h4>
+                    <p>linkedin.com/in/leedev</p>
+                </div>
+                <div class="contact-item">
+                    <h4>🐙 GitHub</h4>
+                    <p>github.com/leedev</p>
+                </div>
+                <div class="contact-item">
+                    <h4>📱 전화</h4>
+                    <p>010-1234-5678</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Glolee. All rights reserved. Made with ❤️ and lots of ☕</p>
+    </div>
+</footer>
+
+<script>
+    // 부드러운 스크롤
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // 스크롤 시 네비게이션 배경 변화
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 100) {
+            nav.style.background = 'rgba(255, 255, 255, 0.98)';
+        } else {
+            nav.style.background = 'rgba(255, 255, 255, 0.95)';
+        }
+    });
+
+    // 스킬 카드 호버 효과
+    document.querySelectorAll('.skill-category').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // 타이핑 효과
+    const texts = [
+        '풀스택 개발자',
+        'React 전문가',
+        '문제 해결사',
+        '끊임없는 학습자'
+    ];
+
+    let textIndex = 0;
+    let charIndex = 0;
+    let currentText = '';
+    let isDeleting = false;
+
+    function typeWriter() {
+        const heroP = document.querySelector('.hero p');
+
+        if (isDeleting) {
+            currentText = texts[textIndex].substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            currentText = texts[textIndex].substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        if (!isDeleting && charIndex === texts[textIndex].length) {
+            setTimeout(() => isDeleting = true, 2000);
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % texts.length;
+        }
+
+        setTimeout(typeWriter, isDeleting ? 100 : 200);
+    }
+
+    // 페이지 로드 완료 후 타이핑 효과 시작
+    window.addEventListener('load', () => {
+        setTimeout(typeWriter, 3000);
+    });
+
+    // 프로젝트 카드 3D 효과
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+        });
+    });
+
+    // 스크롤 애니메이션
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // 관찰할 요소들 등록
+    document.querySelectorAll('.project-card, .skill-category, .contact-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+</script>
 </body>
 </html>
